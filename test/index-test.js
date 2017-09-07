@@ -7,44 +7,45 @@ describe('index', function() {
       var spy = sinon.spy(console, 'log');
       iterativeLog([1, 2, 3])
 
-      expect(spy.called)
-      expect(spy.called)
-      expect(spy.called)
+      expect(spy.calledThrice)
 
       spy.restore()
       // expect.restoreSpies()
     })
   })
 
-  // describe('iterate(callback)', function() {
-  //   it('calls the callback on an internal array, then returns the array', function() {
-  //     // const forEach = expect.spyOn(Array.prototype, 'forEach').andCallThrough()
-  //     var spy =  sinon.spy(Array.prototype, 'forEach');
-  //     var callback = sinon.spy()
-  //
-  //     var result = iterate(callback)
-  //
-  //     // This is a hack to fix the fact that
-  //     // this assertion is checked before forEach()
-  //     // has been called. Totally unclear why that's
-  //     // the case, since forEach *should* be blocking.
-  //     setTimeout(() => {
-  //       expect(spy).toHaveBeenCalled()
-  //     }, 1)
-  //     expect(callback.calls.length).toBeGreaterThanOrEqualTo(1)
-  //     expect(Array.isArray(result)).toBe(true)
-  //   })
-  // })
+  describe('iterate(callback)', function() {
+    it('calls the callback on an internal array, then returns the array', function() {
+
+      const result = []
+      const callback = function(x) {result.push(x+"s")}
+
+      var spy = sinon.spy(callback)
+      iterate(callback)
+  
+      expect(spy.called)
+      expect(result[0]).to.have.string("s")
+
+
+    })
+  })
 
   describe('doToArray(array, callback)', function() {
     it('uses `callback` as the callback for `array`.forEach', function() {
-      var array = [1, 2, 3]
+      var arr = [1, 2, 3]
+      var newArr = []
+      var testFunction = (x) => {newArr.push(x)}
+      var spy = sinon.spy(testFunction)
+      doToArray(arr, testFunction)
 
-      var callback = (x) => (x++)
+      var arr2 = ["rooty","tooty","blendy","fruity"]
+      var secondTest = (x) => {newArr.push(x)}
+      var spy2 = sinon.spy(secondTest)
+      doToArray(arr2, secondTest)
 
-      doToArray(array, callback)
-      debugger
-      expect(x).to.be.equal(3)
+      expect(spy2.calledThrice)
+      expect(newArr.length).to.eql(7)
+      expect(newArr[3]).to.eql("rooty")
     })
   })
 })
